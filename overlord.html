@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta name="theme-color" content="#090b12">
+<title>OVERLORD — Rule the World</title>
+<style>
+:root{--bg:#090b12;--panel:#111522;--line:#2a3042;--red:#ff4057;--gold:#ffca70;--text:#edf1ff;--muted:#8d96ad;--blue:#54a6ff;--green:#62e6a5}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#171b2b 0,#090b12 58%);color:var(--text);font:15px/1.4 system-ui,-apple-system,Segoe UI,sans-serif;min-height:100vh}
+header{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 18px;border-bottom:1px solid var(--line);background:#0b0e17eF;position:sticky;top:0;z-index:5;backdrop-filter:blur(14px)}
+.brand{font-weight:1000;letter-spacing:.13em;font-size:clamp(19px,4vw,28px)}.brand b{color:var(--red)}.tag{font-size:10px;letter-spacing:.25em;color:var(--muted);margin-top:2px}.pill{border:1px solid #55303d;background:#26131b;color:#ff8c9a;padding:7px 11px;border-radius:99px;font-size:12px}
+main{max-width:1250px;margin:auto;padding:16px;display:grid;grid-template-columns:minmax(0,1fr) 285px;gap:14px}.board,.sidebox{background:linear-gradient(145deg,#141928f5,#0e121d);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:0 20px 60px #0004}
+.boardtop{display:flex;align-items:center;justify-content:space-between;padding:13px 15px;border-bottom:1px solid var(--line);gap:10px}.boardtop h2{margin:0;font-size:14px;letter-spacing:.12em}.small{color:var(--muted);font-size:12px}
+#map{display:block;width:100%;height:auto;min-height:300px;touch-action:manipulation;background:radial-gradient(ellipse at 50% 48%,#1b2a38 0,#101824 65%,#0b111a 100%)}
+.land{stroke:#0a1018;stroke-width:3;cursor:pointer;transition:filter .15s,stroke-width .15s}.land:hover{filter:brightness(1.28);stroke:#fff;stroke-width:4}.land.selected{stroke:#fff;stroke-width:4;filter:brightness(1.2)}.land.player{fill:#c8384d}.land.enemy{fill:#356bb7}.land.neutral{fill:#526075}.land.owned{fill:#b52f46}.label{fill:#f3f5ff;font-size:12px;font-weight:800;text-anchor:middle;pointer-events:none;paint-order:stroke;stroke:#111722;stroke-width:3px;stroke-linejoin:round}.city{fill:#fff;stroke:#0a0c11;stroke-width:2;pointer-events:none}
+.legend{display:flex;gap:13px;flex-wrap:wrap;padding:11px 15px;border-top:1px solid var(--line)}.key{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted)}.dot{width:9px;height:9px;border-radius:3px}
+aside{display:flex;flex-direction:column;gap:12px}.sidebox{padding:15px}.sidebox h3{margin:0 0 12px;font-size:12px;letter-spacing:.14em;color:#c6cce0}.stats{display:grid;grid-template-columns:1fr 1fr;gap:8px}.stat{background:#090d16;border:1px solid #242b3c;border-radius:12px;padding:11px}.stat span{display:block;font-size:11px;color:var(--muted)}.stat strong{display:block;font-size:23px;margin-top:3px}.gold{color:var(--gold)}.red{color:#ff7586}.blue{color:var(--blue)}
+button{font:inherit;cursor:pointer;border:1px solid #384157;border-radius:10px;background:#1a2030;color:var(--text);padding:10px 12px;transition:transform .12s,filter .12s}button:hover{filter:brightness(1.2)}button:active{transform:scale(.98)}button:disabled{opacity:.4;cursor:not-allowed}.primary{background:linear-gradient(135deg,#ff4057,#b81f3a);border-color:#ff6678;font-weight:850}.btnrow{display:grid;grid-template-columns:1fr 1fr;gap:8px}.full{width:100%;margin-top:8px}.selection{padding:12px;border:1px solid #30394d;border-radius:12px;background:#0b101a}.selection strong{display:block;font-size:16px}.selection p{margin:5px 0 0;color:var(--muted);font-size:12px}.log{display:flex;flex-direction:column;gap:8px;max-height:180px;overflow:auto}.log p{margin:0;border-left:2px solid #4b5873;padding:5px 0 5px 9px;color:#aeb7cc;font-size:12px}.tip{font-size:12px;color:var(--muted);line-height:1.6}.footer{text-align:center;color:#687189;font-size:10px;letter-spacing:.12em;padding:8px 0 20px}
+#toast{position:fixed;left:50%;bottom:20px;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:#f1f4ff;color:#111522;padding:10px 16px;border-radius:99px;font-weight:800;box-shadow:0 8px 30px #0008;transition:.2s;z-index:20}#toast.show{opacity:1;transform:translate(-50%,0)}
+@media(max-width:800px){main{grid-template-columns:1fr;padding:10px}.boardtop{align-items:flex-start}.sidegrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.sidegrid .wide{grid-column:1/-1}#map{min-height:250px}.sidebox{padding:12px}}
+@media(max-width:430px){.sidegrid{grid-template-columns:1fr}.sidegrid .wide{grid-column:auto}.pill{font-size:10px}.boardtop .small{max-width:120px;text-align:right}}
+</style>
+</head>
+<body>
+<header><div><div class="brand">♛ <b>OVER</b>LORD</div><div class="tag">RULE THE WORLD</div></div><div class="pill">SINGLE-FILE STRATEGY</div></header>
+<main>
+<section class="board">
+ <div class="boardtop"><div><h2>WORLD CONQUEST</h2><div class="small">Select your territory, then conquer a neighbor.</div></div><div class="small" id="turnLabel">TURN 1</div></div>
+ <svg id="map" viewBox="0 0 760 500" role="img" aria-label="Interactive strategy map">
+  <defs><pattern id="grid" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M28 0H0V28" fill="none" stroke="#ffffff" stroke-opacity=".035" stroke-width="1"/></pattern></defs>
+  <rect width="760" height="500" fill="url(#grid)"/>
+  <g id="territories">
+   <path class="land player selected" data-id="0" d="M76 95 L155 66 215 96 205 151 164 178 95 160Z"/>
+   <path class="land neutral" data-id="1" d="M215 96 L284 75 330 116 309 171 255 190 205 151Z"/>
+   <path class="land enemy" data-id="2" d="M330 116 L398 81 454 111 450 166 390 190 309 171Z"/>
+   <path class="land neutral" data-id="3" d="M454 111 L522 78 593 111 586 166 518 189 450 166Z"/>
+   <path class="land enemy" data-id="4" d="M593 111 L665 130 699 185 657 224 586 199 586 166Z"/>
+   <path class="land neutral" data-id="5" d="M95 160 L164 178 183 239 143 278 76 252 58 199Z"/>
+   <path class="land neutral" data-id="6" d="M164 178 L255 190 273 245 229 292 183 239Z"/>
+   <path class="land enemy" data-id="7" d="M255 190 L309 171 390 190 386 247 330 277 273 245Z"/>
+   <path class="land neutral" data-id="8" d="M390 190 L450 166 518 189 525 246 461 278 386 247Z"/>
+   <path class="land neutral" data-id="9" d="M518 189 L586 199 657 224 645 275 579 302 525 246Z"/>
+   <path class="land enemy" data-id="10" d="M76 252 L143 278 183 239 229 292 208 350 145 371 86 331Z"/>
+   <path class="land neutral" data-id="11" d="M229 292 L273 245 330 277 338 340 286 374 208 350Z"/>
+   <path class="land player" data-id="12" d="M330 277 L386 247 461 278 452 333 394 362 338 340Z"/>
+   <path class="land enemy" data-id="13" d="M461 278 L525 246 579 302 558 357 496 378 452 333Z"/>
+   <path class="land neutral" data-id="14" d="M579 302 L645 275 686 326 655 378 588 395 558 357Z"/>
+   <path class="land neutral" data-id="15" d="M145 371 L208 350 286 374 275 423 215 449 155 428Z"/>
+   <path class="land enemy" data-id="16" d="M286 374 L338 340 394 362 407 420 350 450 275 423Z"/>
+   <path class="land neutral" data-id="17" d="M394 362 L452 333 496 378 490 430 430 452 407 420Z"/>
+   <path class="land neutral" data-id="18" d="M496 378 L558 357 588 395 566 442 490 430Z"/>
+  </g>
+  <g id="labels">
+   <text class="label" x="143" y="126">NORTHLAND</text><text class="label" x="260" y="135">IRONVALE</text><text class="label" x="382" y="137">FROSTGATE</text><text class="label" x="520" y="135">EASTREACH</text><text class="label" x="640" y="176">KINGSFALL</text>
+   <text class="label" x="120" y="222">WESTHAVEN</text><text class="label" x="220" y="224">GREYMARK</text><text class="label" x="329" y="222">DUSKFIELD</text><text class="label" x="450" y="222">RAVENMOOR</text><text class="label" x="585" y="248">HIGHCREST</text>
+   <text class="label" x="145" y="320">STONEPASS</text><text class="label" x="273" y="326">ASHFORD</text><text class="label" x="395" y="310">YOUR CAPITAL</text><text class="label" x="508" y="326">BLACKWATER</text><text class="label" x="620" y="345">SUNSPIRE</text>
+   <text class="label" x="211" y="403">WILLOWMERE</text><text class="label" x="343" y="405">REDMARCH</text><text class="label" x="448" y="400">DRAKE'S END</text><text class="label" x="535" y="409">SOUTHRIDGE</text>
+   <circle class="city" cx="143" cy="110" r="4"/><circle class="city" cx="395" cy="293" r="5"/>
+  </g>
+ </svg>
+ <div class="legend"><div class="key"><i class="dot" style="background:#c8384d"></i>Your empire</div><div class="key"><i class="dot" style="background:#356bb7"></i>Rival empires</div><div class="key"><i class="dot" style="background:#526075"></i>Unclaimed lands</div><div class="key">⚔ Tap a connected territory to attack</div></div>
+</section>
+<aside>
+ <div class="sidebox"><h3>EMPIRE STATUS</h3><div class="stats"><div class="stat"><span>GOLD</span><strong class="gold" id="gold">120</strong></div><div class="stat"><span>ARMY</span><strong id="army">80</strong></div><div class="stat"><span>LANDS</span><strong class="red" id="lands">2</strong></div><div class="stat"><span>TURN</span><strong class="blue" id="turn">1</strong></div></div></div>
+ <div class="sidebox"><h3>SELECTED TERRITORY</h3><div class="selection"><strong id="selName">NORTHLAND</strong><p id="selInfo">Your land · 40 troops</p></div><div class="btnrow" style="margin-top:10px"><button id="recruit">＋ Recruit</button><button id="upgrade">⬆ Fortify</button></div><button id="attack" class="primary full">⚔ CONQUER NEIGHBOR</button><button id="end" class="full">End Turn ↗</button><button id="reset" class="full">Restart Campaign</button></div>
+ <div class="sidebox"><h3>WAR REPORT</h3><div class="log" id="log"><p>Welcome, Commander. Your empire awaits.</p><p>Recruit troops, claim neutral land, and defeat the rivals.</p></div></div>
+ <div class="sidebox tip"><b style="color:#dfe5fa">HOW TO PLAY</b><br>1. Tap one of your red territories.<br>2. Recruit troops or fortify for defense.<br>3. Attack adjacent neutral or blue territories.<br>4. End your turn to earn gold and face rival moves.<br><br><span style="color:#ff8190">This is a self-contained mini strategy game.</span></div>
+</aside>
+</main>
+<div class="footer">OVERLORD • RULE THE WORLD • BROTEX</div><div id="toast"></div>
+<script>
+(()=> {
+const names=['Northland','Ironvale','Frostgate','Eastreach','Kingsfall','Westhaven','Greymark','Duskfield','Ravenmoor','Highcrest','Stonepass','Ashford','Your Capital','Blackwater','Sunspire','Willowmere','Redmarch',"Drake's End",'Southridge'];
+const adjacent=[[1,5],[0,2,6],[1,3,7],[2,4,8],[3,9],[0,6,10],[1,5,7,11],[2,6,8,11],[3,7,9,12],[4,8,13,14],[5,11,15],[6,7,10,12,15],[8,11,13,16],[9,12,14,17],[9,13,18],[10,11,16],[11,12,15,17],[13,16,18],[14,17]];
+const initialOwner=['player','neutral','enemy','neutral','enemy','neutral','neutral','enemy','neutral','neutral','enemy','neutral','player','enemy','neutral','neutral','enemy','neutral','neutral'];
+let state, selected=0;
+const $=id=>document.getElementById(id);
+function init(){state={gold:120,turn:1,lands:initialOwner.map((owner,i)=>({owner,troops:owner==='player'?(i===12?40:40):owner==='enemy'?32:12,fort:0}))};selected=0;document.querySelectorAll('.land').forEach(el=>el.classList.remove('selected'));$('log').innerHTML='<p>Campaign started. The world is yours to conquer.</p>';render();say('New campaign started');}
+function log(msg){let p=document.createElement('p');p.textContent='T'+state.turn+' — '+msg;$('log').prepend(p);while($('log').children.length>8)$('log').lastChild.remove();}
+function say(msg){const t=$('toast');t.textContent=msg;t.classList.add('show');clearTimeout(window._toast);window._toast=setTimeout(()=>t.classList.remove('show'),1700);}
+function render(){let own=state.lands.filter(x=>x.owner==='player');$('gold').textContent=state.gold;$('army').textContent=own.reduce((a,x)=>a+x.troops,0);$('lands').textContent=own.length;$('turn').textContent=state.turn;$('turnLabel').textContent='TURN '+state.turn;
+document.querySelectorAll('.land').forEach(el=>{let i=+el.dataset.id,l=state.lands[i];el.classList.toggle('selected',i===selected);el.classList.toggle('player',l.owner==='player');el.classList.toggle('owned',l.owner==='player');el.classList.toggle('enemy',l.owner==='enemy');el.classList.toggle('neutral',l.owner==='neutral');el.style.opacity=l.owner==='neutral'?'.83':'1';});
+const l=state.lands[selected];$('selName').textContent=names[selected];$('selInfo').textContent=(l.owner==='player'?'Your land':l.owner==='enemy'?'Rival territory':'Unclaimed territory')+' · '+l.troops+' troops'+(l.fort?' · Fort level '+l.fort:'');$('recruit').disabled=l.owner!=='player'||state.gold<25;$('upgrade').disabled=l.owner!=='player'||state.gold<40||l.fort>=3;$('attack').disabled=l.owner!=='player'||!adjacent[selected].some(i=>state.lands[i].owner!=='player')||l.troops<8;$('attack').textContent='⚔ CONQUER NEIGHBOR';if(own.length===state.lands.length){say('VICTORY! You rule the world.');}}
+document.querySelectorAll('.land').forEach(el=>el.addEventListener('click',()=>{selected=+el.dataset.id;render();}));
+$('recruit').onclick=()=>{let l=state.lands[selected];if(l.owner!=='player'||state.gold<25)return;state.gold-=25;l.troops+=18;log('Recruited 18 troops in '+names[selected]+'.');render();};
+$('upgrade').onclick=()=>{let l=state.lands[selected];if(l.owner!=='player'||state.gold<40||l.fort>=3)return;state.gold-=40;l.fort++;log(names[selected]+' fortified to level '+l.fort+'.');render();};
+$('attack').onclick=()=>{let src=state.lands[selected];if(src.owner!=='player')return;let targets=adjacent[selected].filter(i=>state.lands[i].owner!=='player');if(!targets.length)return;let targetId=targets.sort((a,b)=>state.lands[a].troops-state.lands[b].troops)[0],dst=state.lands[targetId];let send=Math.floor(src.troops*.55);if(send<5){say('Recruit more troops first');return;}let power=send+Math.floor(Math.random()*12),defense=dst.troops+dst.fort*9+Math.floor(Math.random()*12);src.troops-=send;
+if(power>defense){dst.owner='player';dst.troops=Math.max(4,power-defense);dst.fort=0;selected=targetId;state.gold+=15;log('Victory! Captured '+names[targetId]+'.');say('Territory conquered!');}else{dst.troops=Math.max(2,defense-power);log('Attack on '+names[targetId]+' failed.');say('Attack repelled!');}render();checkEnd();};
+$('end').onclick=()=>{state.turn++;state.gold+=20+state.lands.filter(l=>l.owner==='player').length*3;state.lands.forEach((l,i)=>{if(l.owner==='enemy'){l.troops+=4;let opts=adjacent[i].filter(n=>state.lands[n].owner!=='enemy');if(opts.length&&Math.random()<.32){let n=opts[Math.floor(Math.random()*opts.length)],target=state.lands[n];let attack=l.troops+Math.floor(Math.random()*10),def=target.troops+target.fort*10;if(attack>def){target.owner='enemy';target.troops=Math.max(4,attack-def);log('Rivals captured '+names[n]+'.');}else target.troops=Math.max(2,def-attack);l.troops=Math.max(8,Math.floor(l.troops*.65));}}else if(l.owner==='player')l.troops+=3;});log('Turn ended. Your treasury and armies have grown.');render();checkEnd();};
+$('reset').onclick=init;
+function checkEnd(){if(state.lands.every(l=>l.owner==='player')){log('TOTAL VICTORY — the world is united under your flag.');say('VICTORY — RULE THE WORLD!');}else if(!state.lands.some(l=>l.owner==='player')){say('Your empire has fallen. Restart to try again.');}}
+init();
+})();
+</script>
+</body>
+</html>
