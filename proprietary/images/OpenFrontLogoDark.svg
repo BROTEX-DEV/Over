@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 170" role="img" aria-labelledby="title desc">
+<title id="title">OVERLORD</title><desc id="desc">OVERLORD strategy game logo</desc>
+<defs><linearGradient id="metal" x1="0" y1="0" x2="0.9" y2="1"><stop offset="0" stop-color="#fff"/><stop offset=".42" stop-color="#aeb8c7"/><stop offset="1" stop-color="#586579"/></linearGradient><linearGradient id="red" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ff5b5b"/><stop offset="1" stop-color="#8e101b"/></linearGradient></defs>
+<g transform="translate(14 10)"><path d="M58 4 74 29 99 15 94 49 112 63 92 78 86 116 58 104 30 116 24 78 4 63 22 49 17 15 42 29Z" fill="none" stroke="url(#red)" stroke-width="5"/><path d="M31 61 44 76 58 47 72 76 85 61 79 92 58 101 37 92Z" fill="url(#metal)"/><path d="M30 125H86" stroke="url(#red)" stroke-width="5" stroke-linecap="round"/></g>
+<text x="145" y="91" font-family="Arial, Helvetica, sans-serif" font-size="72" font-weight="900" letter-spacing="3" fill="url(#metal)">OVERLORD</text>
+<path d="M148 111H718" stroke="url(#red)" stroke-width="4"/><text x="151" y="143" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" letter-spacing="6" fill="#aab4c3">RULE THE WORLD</text>
+</svg>
