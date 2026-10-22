@@ -1,0 +1,42 @@
+name: OVERLORD container check
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "Dockerfile"
+      - "nginx.conf"
+      - "supervisord.conf"
+      - "src/**"
+      - "packages/**"
+      - "resources/**"
+      - "proprietary/**"
+      - "scripts/**"
+      - "package.json"
+      - "package-lock.json"
+      - "vite.config.*"
+      - ".github/workflows/container-check.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  docker-build:
+    name: Build production server image
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - name: Check out OVERLORD
+        uses: actions/checkout@v4
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Build production container (no publish)
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./Dockerfile
+          push: false
+          tags: overlord:ci-check
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
