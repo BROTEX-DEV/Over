@@ -24,7 +24,7 @@ jobs:
 
       - name: Replace destination working tree with branded source
         run: |
-          rsync -a --delete --exclude='.git' /tmp/overlord-source/ ./
+          rsync -a --delete --exclude='.git' --exclude='.github/workflows/**' /tmp/overlord-source/ ./
           test -f index.html
           test -f package.json
           test -f resources/lang/en.json
