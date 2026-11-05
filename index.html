@@ -68,6 +68,36 @@ button{border:0;cursor:pointer;font:700 14px 'Vazirmatn',Tahoma,sans-serif}
  p,li{line-height:1.8}
 }
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;scroll-behavior:auto!important}}
+
+/* آموزش متحرک توربین‌ها */
+.movie-launch{display:inline-flex;align-items:center;justify-content:center;gap:9px;align-self:center;margin:14px auto 2px;padding:12px 22px;border-radius:24px;background:linear-gradient(100deg,#ed8fbd,#9478df);color:#fff;box-shadow:0 7px 18px #b78acb35;font-size:15px}
+.movie-launch:hover{filter:brightness(1.04)}
+.movie-overlay{position:fixed;inset:0;z-index:100;display:none;place-items:center;padding:16px;background:#34264fc9;backdrop-filter:blur(8px)}
+.movie-overlay.open{display:grid}
+.movie-box{position:relative;width:min(760px,96vw);max-height:92dvh;overflow:auto;background:linear-gradient(145deg,#fffaff,#f1f7ff);border:3px solid #fff;border-radius:28px;padding:clamp(18px,3vw,30px);box-shadow:0 24px 80px #21133466;text-align:center}
+.movie-close{position:absolute;top:12px;left:14px;background:#ffe5f0;color:#9b5684;border-radius:50%;width:42px;height:42px;font-size:22px}
+.movie-title{color:#855fc8;font-size:clamp(22px,4vw,32px);margin:6px 42px 8px}
+.movie-subtitle{font-size:15px;color:#8f7a9d;margin-bottom:12px}
+.movie-scene{width:100%;height:auto;max-height:310px;background:linear-gradient(145deg,#e9f8ff,#f8eafa);border-radius:22px;border:1px solid #e8dcfa}
+.movie-controls{display:flex;justify-content:center;align-items:center;gap:10px;flex-wrap:wrap;margin:14px 0}
+.movie-control{padding:10px 18px;border-radius:22px;background:#9478dc;color:#fff}
+.movie-control.secondary{background:#ffe8f2;color:#a95c8c}
+.movie-stage{font-size:17px;font-weight:800;color:#7659b2;background:#f4edff;border-radius:18px;padding:12px;margin:10px 0}
+.movie-note{font-size:13px;color:#927f9c;line-height:1.8}
+.wind-rotor{transform-box:fill-box;transform-origin:center;animation:windSpin 3.2s linear infinite}
+.air-flow{stroke-dasharray:12 12;animation:airMove 1.2s linear infinite}
+.generator-glow{animation:lightPulse 1.3s ease-in-out infinite alternate}
+.gas-rotor{transform-box:fill-box;transform-origin:center;animation:gasSpin .65s linear infinite}
+.hot-flow{stroke-dasharray:9 11;animation:airMove .8s linear infinite}
+.flame{transform-origin:center;animation:flameDance .45s ease-in-out infinite alternate}
+@keyframes windSpin{to{transform:rotate(360deg)}}
+@keyframes gasSpin{to{transform:rotate(360deg)}}
+@keyframes airMove{to{stroke-dashoffset:-46}}
+@keyframes lightPulse{from{opacity:.45}to{opacity:1}}
+@keyframes flameDance{from{transform:scale(.9) rotate(-3deg)}to{transform:scale(1.08) rotate(3deg)}}
+.movie-box.paused .wind-rotor,.movie-box.paused .air-flow,.movie-box.paused .generator-glow,.movie-box.paused .gas-rotor,.movie-box.paused .hot-flow,.movie-box.paused .flame{animation-play-state:paused}
+@media(prefers-reduced-motion:reduce){.wind-rotor,.air-flow,.generator-glow,.gas-rotor,.hot-flow,.flame{animation:none!important}}
+
 </style>
 </head>
 <body>
@@ -140,6 +170,8 @@ button{border:0;cursor:pointer;font:700 14px 'Vazirmatn',Tahoma,sans-serif}
    </div>
   </div>
   <div class="process"><span class="step">باد 💨</span><span class="arrow">←</span><span class="step">چرخش 🌀</span><span class="arrow">←</span><span class="step">ژنراتور ⚙️</span><span class="arrow">←</span><span class="step">برق 💡</span></div>
+  <button class="movie-launch" type="button" data-movie="wind">▶ پخش فیلمِ کارکرد توربین بادی</button>
+
  </div>
 </section>
 
@@ -230,6 +262,7 @@ button{border:0;cursor:pointer;font:700 14px 'Vazirmatn',Tahoma,sans-serif}
     </svg>
    </div>
   </div>
+  <button class="movie-launch" type="button" data-movie="gas">▶ پخش فیلمِ کارکرد توربین گازی</button>
  </div>
 </section>
 
@@ -322,6 +355,59 @@ button{border:0;cursor:pointer;font:700 14px 'Vazirmatn',Tahoma,sans-serif}
 </section>
 
 </div>
+
+<div class="movie-overlay" id="movieOverlay" role="dialog" aria-modal="true" aria-labelledby="movieTitle">
+ <div class="movie-box" id="movieBox">
+  <button class="movie-close" id="movieClose" type="button" aria-label="بستن">×</button>
+  <h2 class="movie-title" id="movieTitle">انیمیشن آموزشی</h2>
+  <p class="movie-subtitle" id="movieSubtitle">ببینیم دستگاه چطور کار می‌کند!</p>
+  <svg class="movie-scene" id="movieScene" viewBox="0 0 640 300" role="img" aria-label="انیمیشن مراحل کار توربین">
+   <defs><linearGradient id="movieSky" x1="0" x2="1"><stop stop-color="#e4f7ff"/><stop offset="1" stop-color="#f9eafa"/></linearGradient></defs>
+   <rect width="640" height="300" rx="22" fill="url(#movieSky)"/>
+   <g id="windScene">
+    <circle cx="80" cy="65" r="30" fill="#ffda78"/>
+    <path class="air-flow" d="M22 115 H180 M12 145 H145 M30 175 H170" stroke="#65bde8" stroke-width="7" stroke-linecap="round" fill="none"/>
+    <path d="M260 120 L245 270" stroke="#8b78d5" stroke-width="15" stroke-linecap="round"/>
+    <g class="wind-rotor" transform="translate(260 115)" stroke="#8b78d5" stroke-width="12" stroke-linecap="round">
+     <path d="M0 0 L-10 -100 Q0 -120 10 -100 L7 -5" fill="#fff"/>
+     <path d="M0 0 L-95 45 Q-118 42 -105 20 L-8 -8" fill="#fff"/>
+     <path d="M0 0 L85 55 Q105 75 82 82 L-8 10" fill="#fff"/>
+     <circle r="14" fill="#f3c65c" stroke="#fff" stroke-width="5"/>
+    </g>
+    <path d="M275 120 C355 120 355 175 430 175" stroke="#a18ae4" stroke-width="7" stroke-dasharray="8 8" fill="none"/>
+    <rect x="430" y="125" width="115" height="105" rx="16" fill="#aa96e9" stroke="#8069c6" stroke-width="5"/>
+    <g class="generator-glow"><path d="M493 142 l-24 43 h24 l-12 32 42 -50 h-27 l13 -25z" fill="#ffe277"/></g>
+    <text x="487" y="258" text-anchor="middle" font-size="18" fill="#68539d" font-weight="bold">ژنراتور و برق</text>
+    <text x="260" y="292" text-anchor="middle" font-size="17" fill="#68539d">پره‌های توربین</text>
+   </g>
+   <g id="gasScene" style="display:none">
+    <path class="hot-flow" d="M25 150 H595" stroke="#f0a16e" stroke-width="12" stroke-linecap="round" fill="none"/>
+    <rect x="100" y="92" width="440" height="116" rx="55" fill="#b7a7ed" stroke="#8069c6" stroke-width="6"/>
+    <path d="M100 112 L55 150 L100 188" fill="#d9d0fa" stroke="#8069c6" stroke-width="5"/>
+    <path d="M540 112 L585 150 L540 188" fill="#ffc0d8" stroke="#d77ca9" stroke-width="5"/>
+    <g class="gas-rotor" transform="translate(250 150)" stroke="#fff" stroke-width="9" stroke-linecap="round">
+     <path d="M0 -48 L-10 -8 M0 48 L10 8 M-48 0 L-8 10 M48 0 L8 -10 M-34 -34 L-7 -7 M34 34 L7 7 M34 -34 L7 -7 M-34 34 L-7 7"/>
+     <circle r="13" fill="#f6cc62" stroke="#fff" stroke-width="4"/>
+    </g>
+    <g class="gas-rotor" transform="translate(420 150) scale(.8)" stroke="#fff" stroke-width="9" stroke-linecap="round">
+     <path d="M0 -48 L-10 -8 M0 48 L10 8 M-48 0 L-8 10 M48 0 L8 -10 M-34 -34 L-7 -7 M34 34 L7 7 M34 -34 L7 -7 M-34 34 L-7 7"/>
+     <circle r="13" fill="#f6cc62" stroke="#fff" stroke-width="4"/>
+    </g>
+    <path class="flame" d="M40 90 Q15 60 48 25 Q45 57 70 53 Q64 22 95 12 Q82 62 112 90Z" fill="#ffad7d"/>
+    <path d="M540 220 Q575 200 605 220" stroke="#8b78d5" stroke-width="7" fill="none" stroke-linecap="round"/>
+    <text x="320" y="260" text-anchor="middle" font-size="18" fill="#68539d" font-weight="bold">گاز داغ، پره‌ها را می‌چرخاند</text>
+   </g>
+  </svg>
+  <div class="movie-stage" id="movieStage" aria-live="polite">۱. باد به پره‌ها می‌وزد و آن‌ها را می‌چرخاند.</div>
+  <div class="movie-controls">
+   <button class="movie-control" id="moviePause" type="button">⏸ مکث</button>
+   <button class="movie-control secondary" id="movieReplay" type="button">↻ از اول</button>
+   <button class="movie-control secondary" id="movieClose2" type="button">بستن فیلم</button>
+  </div>
+  <p class="movie-note">این یک انیمیشن آموزشی ساده است؛ مراحل کار دستگاه را به‌صورت تصویری نشان می‌دهد.</p>
+ </div>
+</div>
+
 <div class="controls">
  <button class="nav" id="prev" aria-label="اسلاید قبلی">قبلی</button>
  <span id="counter">۱ / ۱۲</span>
@@ -348,7 +434,46 @@ document.getElementById('fullscreen').addEventListener('click',async()=>{
 document.addEventListener('keydown',e=>{
  if(['ArrowLeft','ArrowDown','PageDown',' '].includes(e.key)){e.preventDefault();show(index+1)}
  if(['ArrowRight','ArrowUp','PageUp','Backspace'].includes(e.key)){e.preventDefault();show(index-1)}
- if(e.key==='Home')show(0);if(e.key==='End')show(slides.length-1);
+ if(e.key==='Home')
+const movieOverlay=document.getElementById('movieOverlay');
+const movieBox=document.getElementById('movieBox');
+const movieTitle=document.getElementById('movieTitle');
+const movieSubtitle=document.getElementById('movieSubtitle');
+const movieStage=document.getElementById('movieStage');
+const windScene=document.getElementById('windScene');
+const gasScene=document.getElementById('gasScene');
+const moviePause=document.getElementById('moviePause');
+let movieKind='wind', movieTimer=null, movieStep=0, moviePaused=false;
+const movieSteps={
+ wind:['۱. باد به پره‌ها می‌وزد و آن‌ها را می‌چرخاند.','۲. چرخش پره‌ها، محور داخل توربین را حرکت می‌دهد.','۳. محور، ژنراتور را می‌چرخاند و برق تولید می‌شود.'],
+ gas:['۱. هوا وارد دستگاه می‌شود و فشرده می‌شود.','۲. سوخت می‌سوزد و گاز داغ و پرفشار به وجود می‌آید.','۳. گاز داغ پره‌های توربین را می‌چرخاند.','۴. در نیروگاه، چرخش توربین ژنراتور را به حرکت درمی‌آورد.']
+};
+function updateMovieStep(){const steps=movieSteps[movieKind];movieStage.textContent=steps[movieStep%steps.length];movieStep++;}
+function stopMovieTimer(){if(movieTimer){clearInterval(movieTimer);movieTimer=null;}}
+function startMovie(){
+ stopMovieTimer();moviePaused=false;movieBox.classList.remove('paused');moviePause.textContent='⏸ مکث';movieStep=0;updateMovieStep();
+ if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){movieTimer=setInterval(updateMovieStep,3000);}
+}
+function openMovie(kind){
+ movieKind=kind;windScene.style.display=kind==='wind'?'':'none';gasScene.style.display=kind==='gas'?'':'none';
+ movieTitle.textContent=kind==='wind'?'انیمیشن کارکرد توربین بادی':'انیمیشن کارکرد توربین گازی';
+ movieSubtitle.textContent=kind==='wind'?'از وزش باد تا روشن شدن چراغ!':'از هوای فشرده و گاز داغ تا چرخش توربین!';
+ movieOverlay.classList.add('open');document.body.style.overflow='hidden';startMovie();document.getElementById('movieClose').focus();
+}
+function closeMovie(){stopMovieTimer();movieOverlay.classList.remove('open');movieBox.classList.remove('paused');document.body.style.overflow='';}
+document.querySelectorAll('[data-movie]').forEach(button=>button.addEventListener('click',()=>openMovie(button.dataset.movie)));
+document.getElementById('movieClose').addEventListener('click',closeMovie);
+document.getElementById('movieClose2').addEventListener('click',closeMovie);
+movieOverlay.addEventListener('click',e=>{if(e.target===movieOverlay)closeMovie();});
+moviePause.addEventListener('click',()=>{
+ moviePaused=!moviePaused;movieBox.classList.toggle('paused',moviePaused);
+ if(moviePaused){stopMovieTimer();moviePause.textContent='▶ ادامه'}
+ else{moviePause.textContent='⏸ مکث';if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches)movieTimer=setInterval(updateMovieStep,3000);}
+});
+document.getElementById('movieReplay').addEventListener('click',startMovie);
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&movieOverlay.classList.contains('open'))closeMovie();});
+
+show(0);if(e.key==='End')show(slides.length-1);
 });
 let startX=0;
 document.addEventListener('touchstart',e=>{startX=e.changedTouches[0].screenX},{passive:true});
